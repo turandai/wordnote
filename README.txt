@@ -1,3 +1,3 @@
 # wordnote
 to do list:
-1.
+1. create a window.
