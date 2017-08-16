@@ -4,7 +4,7 @@ class MainFrame(wx.Frame):
     def __init__(self):
 
         '''
-        class parameters:
+        whole class parameters:
             main_panel
             recite_panel
             main_new_word_text
@@ -97,7 +97,7 @@ class MainFrame(wx.Frame):
         if self.number>=len(self.all_word):
             self.number=0
         self.word.SetLabel(self.all_word[self.number])
-        self.word.Center(wx.HORIZONTAL)
+        self.word.CenterOnParent()
 
     def recite_react_button_yes(self,event):
         self.number+=1
