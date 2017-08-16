@@ -22,7 +22,7 @@ class MainFrame(wx.Frame):
         self.main_panel=wx.Panel(self,size=(300,300))
 
     #button
-        main_button_panel=wx.Panel(self.main_panel,pos=(172,86))
+        main_button_panel=wx.Panel(self.main_panel,pos=(172,96))
         sizer=wx.BoxSizer(wx.VERTICAL)
         buttons=[]
         button_add=wx.Button(main_button_panel,label='Add')
@@ -39,13 +39,17 @@ class MainFrame(wx.Frame):
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_recite,button_recite)
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_evaluate,button_evaluate)
     #enter text
-        main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,104))
+        self.main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,114))
     #read data
         with open('/Users/turan/Documents/study/programming/pc/wordnote/data.txt','r') as data:
             self.all_word=data.readlines()
             print(self.all_word)
-    #decoration
-        wx.StaticLine(self.main_panel,pos=(10,85),size=(280,1))
+    #other
+        heading=wx.StaticText(self.main_panel,label='welcome to\n          wordnote',pos=(12,5))
+        heading.SetForegroundColour((120,120,120))
+        heading_font=wx.Font(35,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
+        heading.SetFont(heading_font)
+        wx.StaticLine(self.main_panel,pos=(10,90),size=(280,10))
 
     def main_react_button_add(self,event):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
