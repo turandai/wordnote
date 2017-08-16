@@ -2,15 +2,30 @@ import wx
 
 class MainFrame(wx.Frame):
     def __init__(self):
+
+        '''
+        class parameters:
+            main_panel
+            recite_panel
+            main_new_word_text
+            all_word
+            number
+        '''
+
         wx.Frame.__init__(self,None,title='wordnote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
-        self.Show(True)
-        self.Centre()
+
+        self.init_menu()
         self.init_main_panel()
         self.main_panel.Show(True)
         self.init_recite_panel()
         self.recite_panel.Show(False)
 
-        # menu
+
+
+        self.Show(True)
+        self.Centre()
+
+    def init_menu(self):
         menubar = wx.MenuBar()
         file_menu = wx.Menu()
         file_item = wx.MenuItem(file_menu, id=wx.ID_ANY, text='See All')
@@ -32,7 +47,7 @@ class MainFrame(wx.Frame):
     #enter text
         self.main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,154))
     #read data
-        with open('/Users/turan/Documents/study/programming/pc/wordnote/data.txt','r') as data:
+        with open('data.txt','r') as data:
             self.all_word=data.readlines()
             print(self.all_word)
     #other
@@ -47,7 +62,7 @@ class MainFrame(wx.Frame):
         if new_word.isalpha() and new_word+'\n' not in self.all_word:
             print(new_word+' is added')
             self.all_word.append(new_word+'\n')
-            with open('/Users/turan/Documents/study/programming/pc/wordnote/data.txt','w') as data:
+            with open('data.txt','w') as data:
                 data.writelines(self.all_word)
             print(self.all_word)
 
@@ -61,29 +76,37 @@ class MainFrame(wx.Frame):
     def init_recite_panel(self):
         self.recite_panel=wx.Panel(self,size=(300,300))
     #button
-        recite_button_panel=wx.Panel(self.recite_panel,pos=(-1,130))
-        buttons=[]
-        button_no=wx.Button(recite_button_panel,label='No')
-        button_yes=wx.Button(recite_button_panel,label='Yes')
-        button_spell=wx.Button(recite_button_panel,label='Spell')
-        buttons.append(button_no)
-        buttons.append(button_yes)
-        buttons.append(button_spell)
-        sizer=wx.BoxSizer(wx.HORIZONTAL)
-        for i in range(0,len(buttons)):
-            sizer.Add(buttons[i],flag=wx.ALL,border=8)
-        recite_button_panel.SetSizer(sizer)
-        sizer.Fit(recite_button_panel)
+        recite_button_panel=wx.Panel(self.recite_panel,size=(300,300))
+        button_no=wx.Button(recite_button_panel,label='No',pos=(30,190))
+        button_yes=wx.Button(recite_button_panel,label='Yes',pos=(192,190))
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_no,button_no)
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_yes,button_yes)
-        recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_spell,button_spell)
+        wx.StaticLine(self.recite_panel,pos=(10,120),size=(280,10))
+    #word
+        word_panel=wx.Panel(self.recite_panel,size=(300,180))
+        #word_panel.SetBackgroundColour('black')
+        recite_font=wx.Font(45,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
+        self.number=0
+        self.word=wx.StaticText(word_panel,label=self.all_word[self.number])
+        self.word.SetForegroundColour((120,120,120))
+        self.word.SetFont(recite_font)
+        self.word.CenterOnParent()
 
     def recite_react_button_no(self,event):
-        print('no')
+        self.number+=1
+        if self.number>=len(self.all_word):
+            self.number=0
+        self.word.SetLabel(self.all_word[self.number])
+        self.word.Center(wx.HORIZONTAL)
 
     def recite_react_button_yes(self,event):
-        print('yes')
+        self.number+=1
+        if self.number>=len(self.all_word):
+            self.number=0
+        print(self.number)
+        self.word.SetLabel(self.all_word[self.number])
+        self.word.CenterOnParent()
 
-    def recite_react_button_spell(self, event):
+    def recite_react_button_spell(self,event):
         print('spell')
 
