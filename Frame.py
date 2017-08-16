@@ -22,24 +22,15 @@ class MainFrame(wx.Frame):
         self.main_panel=wx.Panel(self,size=(300,300))
 
     #button
-        main_button_panel=wx.Panel(self.main_panel,pos=(172,96))
-        sizer=wx.BoxSizer(wx.VERTICAL)
-        buttons=[]
-        button_add=wx.Button(main_button_panel,label='Add')
-        button_recite=wx.Button(main_button_panel,label='Recite')
-        button_evaluate=wx.Button(main_button_panel,label='Evaluate')
-        buttons.append(button_add)
-        buttons.append(button_recite)
-        buttons.append(button_evaluate)
-        for i in range(0,len(buttons)):
-            sizer.Add(buttons[i],flag=wx.ALL,border=20)
-        main_button_panel.SetSizer(sizer)
-        sizer.Fit(main_button_panel)
+        main_button_panel=wx.Panel(self.main_panel,pos=(0,0),size=(300,300))
+        button_add=wx.Button(main_button_panel,label='Add',pos=(192,156))
+        button_recite=wx.Button(main_button_panel,label='Recite',pos=(25,230))
+        button_evaluate=wx.Button(main_button_panel,label='Evaluate',pos=(192,230))
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_add,button_add)
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_recite,button_recite)
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_evaluate,button_evaluate)
     #enter text
-        self.main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,114))
+        self.main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,154))
     #read data
         with open('/Users/turan/Documents/study/programming/pc/wordnote/data.txt','r') as data:
             self.all_word=data.readlines()
@@ -49,7 +40,7 @@ class MainFrame(wx.Frame):
         heading.SetForegroundColour((120,120,120))
         heading_font=wx.Font(35,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
         heading.SetFont(heading_font)
-        wx.StaticLine(self.main_panel,pos=(10,90),size=(280,10))
+        wx.StaticLine(self.main_panel,pos=(10,120),size=(280,10))
 
     def main_react_button_add(self,event):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
