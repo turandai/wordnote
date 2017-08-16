@@ -1,3 +1,5 @@
+TO DO LIST
+
 1. set main panel:
     text control to add new word;✅
     button add to conect entered text to data.txt;✅
