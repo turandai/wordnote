@@ -1,4 +1,5 @@
 import wx
+import MyPanel
 
 class MainFrame(wx.Frame):
     def __init__(self):
@@ -10,22 +11,31 @@ class MainFrame(wx.Frame):
             main_new_word_text
             all_word
             number
+            panel_stack
         '''
 
         wx.Frame.__init__(self,None,title='WordNote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
 
+        self.panel_stack=[]
+
+
         self.init_menu()
         self.init_main_panel()
-        self.main_panel.Show(True)
+        panel=wx.Panel(self)
         self.init_recite_panel()
-        self.recite_panel.Show(False)
-
-
+        self.init_evaluate_panel()
 
         self.Show(True)
         self.Centre()
 
+        panel.Bind(wx.EVT_KEY_UP,self.react_key)
+
+
+
+
     def init_menu(self):
+
+
         menubar = wx.MenuBar()
         file_menu = wx.Menu()
         file_item = wx.MenuItem(file_menu, id=wx.ID_ANY, text='See All')
@@ -34,7 +44,8 @@ class MainFrame(wx.Frame):
         self.SetMenuBar(menubar)
 
     def init_main_panel(self):
-        self.main_panel=wx.Panel(self,size=(300,300))
+        self.main_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
+
 
     #button
         main_button_panel=wx.Panel(self.main_panel,pos=(0,0),size=(300,300))
@@ -49,7 +60,7 @@ class MainFrame(wx.Frame):
     #read data
         with open('data.txt','r') as data:
             self.all_word=data.readlines()
-            print(self.all_word)
+            #print(self.all_word)
     #other
         bmp=wx.Bitmap('heading.png',wx.BITMAP_TYPE_ANY)
         bmp.SetSize((350,150))
@@ -57,9 +68,8 @@ class MainFrame(wx.Frame):
         heading.Center(dir=wx.HORIZONTAL)
 
         wx.StaticLine(self.main_panel,pos=(10,120),size=(280,10))
-        panel=wx.Panel(self,-1)
-        panel.Bind(wx.EVT_KEY_UP,self.reicite_react_key)
 
+        self.main_panel.Show(True)
 
     def main_react_button_add(self,event):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
@@ -71,14 +81,13 @@ class MainFrame(wx.Frame):
             print(self.all_word)
 
     def main_react_button_recite(self,event):
-        self.main_panel.Show(False)
         self.recite_panel.Show(True)
 
     def main_react_button_evaluate(self,event):
-        print('evaluate')
+        self.evaluate_panel.Show(True)
 
     def init_recite_panel(self):
-        self.recite_panel=wx.Panel(self,size=(300,300))
+        self.recite_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
     #button
         recite_button_panel=wx.Panel(self.recite_panel,size=(300,300))
         button_no=wx.Button(recite_button_panel,label='No',pos=(30,190))
@@ -86,7 +95,6 @@ class MainFrame(wx.Frame):
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_no,button_no)
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_yes,button_yes)
         wx.StaticLine(self.recite_panel,pos=(10,120),size=(280,10))
-        self.recite_panel.Bind(wx.EVT_KEY_UP,self.reicite_react_key)
     #word
         word_panel=wx.Panel(self.recite_panel,size=(300,180))
         #word_panel.SetBackgroundColour('black')
@@ -97,12 +105,11 @@ class MainFrame(wx.Frame):
         self.word.SetFont(recite_font)
         self.word.CenterOnParent()
 
-    def reicite_react_key(self,event):
-        #print(event)
-        print(event.GetKeyCode())
+
+    def react_key(self,event):
+        #print(event.GetKeyCode())
         if event.GetKeyCode()==27:
-            self.recite_panel.Show(False)
-            self.main_panel.Show(True)
+            self.panel_stack[-1].Show(False)
 
     def recite_react_button_no(self,event):
         self.number+=1
@@ -118,5 +125,9 @@ class MainFrame(wx.Frame):
         self.word.SetLabel(self.all_word[self.number])
         self.word.CenterOnParent()
 
-    def recite_react_button_spell(self,event):
-        print('spell')
+    def init_evaluate_panel(self):
+        self.evaluate_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
+        #self.evaluate_panel=wx.Panel(self,size=(300,300))
+
+        #self.evaluate_panel.Show(False)
+
