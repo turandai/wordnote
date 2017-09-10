@@ -1,3 +1,4 @@
+#shishi
 import wx
 
 class MainFrame(wx.Frame):
