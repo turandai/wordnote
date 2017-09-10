@@ -1,10 +1,10 @@
 import wx
-import Frame
+import MyFrame
 
 app=wx.App()
 
 
-main_frame=Frame.MainFrame()
+main_frame=MyFrame.MainFrame()
 
 
 app.MainLoop()
