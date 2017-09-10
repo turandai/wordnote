@@ -12,7 +12,7 @@ class MainFrame(wx.Frame):
             number
         '''
 
-        wx.Frame.__init__(self,None,title='wordnote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
+        wx.Frame.__init__(self,None,title='WordNote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
 
         self.init_menu()
         self.init_main_panel()
@@ -51,11 +51,15 @@ class MainFrame(wx.Frame):
             self.all_word=data.readlines()
             print(self.all_word)
     #other
-        heading=wx.StaticText(self.main_panel,label='welcome to\n          wordnote',pos=(12,5))
-        heading.SetForegroundColour((120,120,120))
-        heading_font=wx.Font(35,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
-        heading.SetFont(heading_font)
+        bmp=wx.Bitmap('heading.png',wx.BITMAP_TYPE_ANY)
+        bmp.SetSize((350,150))
+        heading=wx.StaticBitmap(self.main_panel,-1,bmp)
+        heading.Center(dir=wx.HORIZONTAL)
+
         wx.StaticLine(self.main_panel,pos=(10,120),size=(280,10))
+        panel=wx.Panel(self,-1)
+        panel.Bind(wx.EVT_KEY_UP,self.reicite_react_key)
+
 
     def main_react_button_add(self,event):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
@@ -82,6 +86,7 @@ class MainFrame(wx.Frame):
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_no,button_no)
         recite_button_panel.Bind(wx.EVT_BUTTON,self.recite_react_button_yes,button_yes)
         wx.StaticLine(self.recite_panel,pos=(10,120),size=(280,10))
+        self.recite_panel.Bind(wx.EVT_KEY_UP,self.reicite_react_key)
     #word
         word_panel=wx.Panel(self.recite_panel,size=(300,180))
         #word_panel.SetBackgroundColour('black')
@@ -91,6 +96,13 @@ class MainFrame(wx.Frame):
         self.word.SetForegroundColour((120,120,120))
         self.word.SetFont(recite_font)
         self.word.CenterOnParent()
+
+    def reicite_react_key(self,event):
+        #print(event)
+        print(event.GetKeyCode())
+        if event.GetKeyCode()==27:
+            self.recite_panel.Show(False)
+            self.main_panel.Show(True)
 
     def recite_react_button_no(self,event):
         self.number+=1
@@ -103,10 +115,8 @@ class MainFrame(wx.Frame):
         self.number+=1
         if self.number>=len(self.all_word):
             self.number=0
-        print(self.number)
         self.word.SetLabel(self.all_word[self.number])
         self.word.CenterOnParent()
 
     def recite_react_button_spell(self,event):
         print('spell')
-
