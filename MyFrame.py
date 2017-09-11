@@ -2,15 +2,17 @@ import wx
 import MyPanel
 
 class MainFrame(wx.Frame):
+
     def __init__(self):
 
         '''
         whole class parameters:
             main_panel
             recite_panel
+            evaluate_panel
             main_new_word_text
             all_word
-            number
+            word_number
             panel_stack
         '''
 
@@ -18,20 +20,27 @@ class MainFrame(wx.Frame):
 
         self.panel_stack=[]
 
-
         self.init_menu()
+        
         self.init_main_panel()
+        
         panel=wx.Panel(self)
+        panel.Bind(wx.EVT_KEY_UP,self.react_key)
+        
         self.init_recite_panel()
+        
         self.init_evaluate_panel()
 
         self.Show(True)
         self.Centre()
 
-        panel.Bind(wx.EVT_KEY_UP,self.react_key)
 
 
-
+#controllers for all panels
+    def react_key(self,event):
+        #print(event.GetKeyCode())
+        if event.GetKeyCode()==27:
+            self.panel_stack[-1].Show(False)
 
     def init_menu(self):
 
@@ -43,8 +52,9 @@ class MainFrame(wx.Frame):
         menubar.Append(file_menu, 'Word')
         self.SetMenuBar(menubar)
 
+#main panel
     def init_main_panel(self):
-        self.main_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
+        self.main_panel=MyPanel.BasePanel(self,self.panel_stack)
 
 
     #button
@@ -86,8 +96,9 @@ class MainFrame(wx.Frame):
     def main_react_button_evaluate(self,event):
         self.evaluate_panel.Show(True)
 
+#recite panel
     def init_recite_panel(self):
-        self.recite_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
+        self.recite_panel=MyPanel.BasePanel(self,self.panel_stack)
     #button
         recite_button_panel=wx.Panel(self.recite_panel,size=(300,300))
         button_no=wx.Button(recite_button_panel,label='No',pos=(30,190))
@@ -99,35 +110,28 @@ class MainFrame(wx.Frame):
         word_panel=wx.Panel(self.recite_panel,size=(300,180))
         #word_panel.SetBackgroundColour('black')
         recite_font=wx.Font(45,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
-        self.number=0
-        self.word=wx.StaticText(word_panel,label=self.all_word[self.number])
+        self.word_number=0
+        self.word=wx.StaticText(word_panel,label=self.all_word[self.word_number])
         self.word.SetForegroundColour((120,120,120))
         self.word.SetFont(recite_font)
         self.word.CenterOnParent()
 
-
-    def react_key(self,event):
-        #print(event.GetKeyCode())
-        if event.GetKeyCode()==27:
-            self.panel_stack[-1].Show(False)
-
     def recite_react_button_no(self,event):
-        self.number+=1
-        if self.number>=len(self.all_word):
-            self.number=0
-        self.word.SetLabel(self.all_word[self.number])
+        self.word_number+=1
+        if self.word_number>=len(self.all_word):
+            self.word_number=0
+        self.word.SetLabel(self.all_word[self.word_number])
         self.word.CenterOnParent()
 
     def recite_react_button_yes(self,event):
-        self.number+=1
-        if self.number>=len(self.all_word):
-            self.number=0
-        self.word.SetLabel(self.all_word[self.number])
+        self.word_number+=1
+        if self.word_number>=len(self.all_word):
+            self.word_number=0
+        self.word.SetLabel(self.all_word[self.word_number])
         self.word.CenterOnParent()
 
+#evaluate panel
     def init_evaluate_panel(self):
-        self.evaluate_panel=MyPanel.FullWindowPanel(self,self.panel_stack)
-        #self.evaluate_panel=wx.Panel(self,size=(300,300))
+        self.evaluate_panel=MyPanel.BasePanel(self,self.panel_stack)
 
-        #self.evaluate_panel.Show(False)
 
