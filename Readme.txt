@@ -14,7 +14,27 @@ TO DO LIST
 3. evaluate panel:
 
 
-    
 4. panel stack:
     in and out by;✅
+    
+5. subtitle matching
+    search for subtitle
+    show video
+
+6. word study control
+    record 'yes' and 'no' times;✅
+    record time of last showing up;
+    generate 'learning status' rangin from 0 to 100 using records;
+    
+    example:
+     __________________________
+    | word | yes | no | status |
+    |——————————————————————————|
+    | girl |  1  | 23 |   45   |
+    |——————————————————————————|
+    | boy  |  6  | 78 |   90   |
+     —————————————————————————-
+
+
+    
     
