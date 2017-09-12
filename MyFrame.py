@@ -19,6 +19,17 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self,None,title='WordNote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
 
         self.panel_stack=[]
+        self.all_word = []
+
+        # read data
+        with open('data.txt', 'r') as data:
+            for line in data.readlines():
+                line=line.split()
+                for i in range(1,4):
+                    line[i]=int(line[i])
+                self.all_word.append(line)
+
+            print(self.all_word)
 
         self.init_menu()
         
@@ -34,9 +45,21 @@ class MainFrame(wx.Frame):
         self.Show(True)
         self.Centre()
 
+    def __del__(self):
+        with open('data.txt', 'w') as data:
+            for line in self.all_word:
+                for i in range(4):
+                    data.write(str(line[i]))
+                    if i == 3:
+                        data.write('\n')
+                    else:
+                        data.write(' ')
+
 
 
 #controllers for all panels
+
+
     def react_key(self,event):
         #print(event.GetKeyCode())
         if event.GetKeyCode()==27:
@@ -67,10 +90,6 @@ class MainFrame(wx.Frame):
         main_button_panel.Bind(wx.EVT_BUTTON,self.main_react_button_evaluate,button_evaluate)
     #enter text
         self.main_new_word_text=wx.TextCtrl(self.main_panel,size=(150,25),pos=(22,154))
-    #read data
-        with open('data.txt','r') as data:
-            self.all_word=data.readlines()
-            #print(self.all_word)
     #other
         bmp=wx.Bitmap('heading.png',wx.BITMAP_TYPE_ANY)
         bmp.SetSize((350,150))
@@ -85,9 +104,7 @@ class MainFrame(wx.Frame):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
         if new_word.isalpha() and new_word+'\n' not in self.all_word:
             print(new_word+' is added')
-            self.all_word.append(new_word+'\n')
-            with open('data.txt','w') as data:
-                data.writelines(self.all_word)
+            self.all_word.append([new_word,0,0,0])
             print(self.all_word)
 
     def main_react_button_recite(self,event):
@@ -111,23 +128,25 @@ class MainFrame(wx.Frame):
         #word_panel.SetBackgroundColour('black')
         recite_font=wx.Font(45,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
         self.word_number=0
-        self.word=wx.StaticText(word_panel,label=self.all_word[self.word_number])
+        self.word=wx.StaticText(word_panel,label=self.all_word[self.word_number][0])
         self.word.SetForegroundColour((120,120,120))
         self.word.SetFont(recite_font)
         self.word.CenterOnParent()
 
     def recite_react_button_no(self,event):
+        self.all_word[self.word_number][2]+=1
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
-        self.word.SetLabel(self.all_word[self.word_number])
+        self.word.SetLabel(self.all_word[self.word_number][0])
         self.word.CenterOnParent()
 
     def recite_react_button_yes(self,event):
+        self.all_word[self.word_number][1]+=1
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
-        self.word.SetLabel(self.all_word[self.word_number])
+        self.word.SetLabel(self.all_word[self.word_number][0])
         self.word.CenterOnParent()
 
 #evaluate panel
