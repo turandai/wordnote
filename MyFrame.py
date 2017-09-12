@@ -1,5 +1,6 @@
 import wx
 import MyPanel
+import datetime
 
 class MainFrame(wx.Frame):
 
@@ -25,7 +26,7 @@ class MainFrame(wx.Frame):
         with open('data.txt', 'r') as data:
             for line in data.readlines():
                 line=line.split()
-                for i in range(1,4):
+                for i in range(1,5):
                     line[i]=int(line[i])
                 self.all_word.append(line)
 
@@ -48,16 +49,13 @@ class MainFrame(wx.Frame):
     def __del__(self):
         with open('data.txt', 'w') as data:
             for line in self.all_word:
-                for i in range(4):
+                for i in range(5):
                     data.write(str(line[i]))
-                    if i == 3:
+                    if i == 4:
                         data.write('\n')
                     else:
                         data.write(' ')
 
-
-
-#controllers for all panels
 
 
     def react_key(self,event):
@@ -102,9 +100,14 @@ class MainFrame(wx.Frame):
 
     def main_react_button_add(self,event):
         new_word=self.main_new_word_text.GetLineText(0).strip().lower()
-        if new_word.isalpha() and new_word+'\n' not in self.all_word:
+        added=False
+        for word in self.all_word:
+            if word[0]==new_word:
+                added=True
+                break
+        if new_word.isalpha() and not added:
             print(new_word+' is added')
-            self.all_word.append([new_word,0,0,0])
+            self.all_word.append([new_word,0,0,int(str(datetime.datetime.now())[:10].replace('-','')),0])
             print(self.all_word)
 
     def main_react_button_recite(self,event):
@@ -135,19 +138,23 @@ class MainFrame(wx.Frame):
 
     def recite_react_button_no(self,event):
         self.all_word[self.word_number][2]+=1
+        self.all_word[self.word_number][3]=int(str(datetime.datetime.now())[:10].replace('-',''))
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
         self.word.SetLabel(self.all_word[self.word_number][0])
         self.word.CenterOnParent()
+        print(self.all_word)
 
     def recite_react_button_yes(self,event):
         self.all_word[self.word_number][1]+=1
+        self.all_word[self.word_number][3]=int(str(datetime.datetime.now())[:10].replace('-',''))
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
         self.word.SetLabel(self.all_word[self.word_number][0])
         self.word.CenterOnParent()
+        print(self.all_word)
 
 #evaluate panel
     def init_evaluate_panel(self):
