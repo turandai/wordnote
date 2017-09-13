@@ -1,6 +1,6 @@
 import wx
 import MyPanel
-import datetime
+import MyDate
 
 class MainFrame(wx.Frame):
 
@@ -26,7 +26,7 @@ class MainFrame(wx.Frame):
         with open('data.txt', 'r') as data:
             for line in data.readlines():
                 line=line.split()
-                for i in range(1,5):
+                for i in (1,2,4):
                     line[i]=int(line[i])
                 self.all_word.append(line)
 
@@ -107,7 +107,8 @@ class MainFrame(wx.Frame):
                 break
         if new_word.isalpha() and not added:
             print(new_word+' is added')
-            self.all_word.append([new_word,0,0,int(str(datetime.datetime.now())[:10].replace('-','')),0])
+            date_now=MyDate.Date()
+            self.all_word.append([new_word,0,0,date_now.get_date(),0])
             print(self.all_word)
 
     def main_react_button_recite(self,event):
@@ -138,7 +139,8 @@ class MainFrame(wx.Frame):
 
     def recite_react_button_no(self,event):
         self.all_word[self.word_number][2]+=1
-        self.all_word[self.word_number][3]=int(str(datetime.datetime.now())[:10].replace('-',''))
+        date_now=MyDate.Date()
+        self.all_word[self.word_number][3]=date_now.get_date()
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
@@ -148,7 +150,8 @@ class MainFrame(wx.Frame):
 
     def recite_react_button_yes(self,event):
         self.all_word[self.word_number][1]+=1
-        self.all_word[self.word_number][3]=int(str(datetime.datetime.now())[:10].replace('-',''))
+        date_now=MyDate.Date()
+        self.all_word[self.word_number][3]=date_now.get_date()
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
