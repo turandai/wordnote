@@ -24,12 +24,12 @@ TO DO LIST
 6. word study control
     record 'yes' and 'no' times;✅
     record date of last time bing responded;✅
-    generate 'learning status' rangin from 0 to 100;
+    generate 'learning rate' rangin from 0 to 100;
     
     
     store 'data.txt' like this example:
     _________________________________________________
-    |  word  |  yes  |  no  |    date    |  status  |
+    |  word  |  yes  |  no  |    date    |   rate   |
     |————————|———————|——————|————————————|——————————|
     |  girl  |   1   |  23  |  20170919  |    45    |
     |————————|———————|——————|————————————|——————————|
