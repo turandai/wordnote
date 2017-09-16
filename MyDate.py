@@ -2,10 +2,10 @@ import datetime
 
 class Date():
 
-    def __init__(self,base=''):
+    def __init__(self,load=''):
         self.__leap_year=False
-        if base!='':
-            self.__date=base
+        if load!='':
+            self.__date=load
         else:
             time=datetime.datetime.now()
             self.__date=str(time)[:10].replace('-','')
@@ -24,11 +24,13 @@ class Date():
         dif_year=self.year-other.year
         dif_month=self.month-other.month
         dif_day=self.day-other.day
-        print(dif_year,dif_month,dif_day)
+        #print(dif_year,dif_month,dif_day)
         if dif_year!=0:
             difference+=dif_year*365
-            if(dif_year>0 and other.is_leap_year)or(dif_year<0 and self.is_leap_year()):
+            if dif_year>0 and other.is_leap_year:
                 difference+=1
+            elif dif_year<0 and self.is_leap_year():
+                difference-=1
         if dif_month!=0:
             if dif_month>0:
                 for i in range(other.month,self.month):
