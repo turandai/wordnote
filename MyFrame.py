@@ -1,6 +1,7 @@
 import wx
 import MyPanel
 import MyDate
+import MyCalculator
 
 class MainFrame(wx.Frame):
 
@@ -20,16 +21,18 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self,None,title='WordNote',size=(300,300),style=wx.CLOSE_BOX | wx.MINIMIZE_BOX)
 
         self.panel_stack=[]
-        self.all_word = []
+        self.all_word=[]
+        self.word_number=0
 
         # read data
         with open('data.txt', 'r') as data:
             for line in data.readlines():
                 line=line.split()
-                for i in (1,2,4):
-                    line[i]=int(line[i])
+                line[1]=int(line[1])
+                line[2]=int(line[2])
+                line[4]=MyCalculator.fade(float(line[4]),MyDate.Date()-MyDate.Date(line[3]))
                 self.all_word.append(line)
-
+            self.all_word.sort(key=lambda x:x[4])
             print(self.all_word)
 
         self.init_menu()
@@ -59,7 +62,7 @@ class MainFrame(wx.Frame):
 
 
     def react_key(self,event):
-        #print(event.GetKeyCode())
+        print(event)
         if event.GetKeyCode()==27:
             self.panel_stack[-1].Show(False)
 
@@ -131,7 +134,6 @@ class MainFrame(wx.Frame):
         word_panel=wx.Panel(self.recite_panel,size=(300,180))
         #word_panel.SetBackgroundColour('black')
         recite_font=wx.Font(45,wx.FONTFAMILY_DEFAULT,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL)
-        self.word_number=0
         self.word=wx.StaticText(word_panel,label=self.all_word[self.word_number][0])
         self.word.SetForegroundColour((120,120,120))
         self.word.SetFont(recite_font)
@@ -139,8 +141,8 @@ class MainFrame(wx.Frame):
 
     def recite_react_button_no(self,event):
         self.all_word[self.word_number][2]+=1
-        date_now=MyDate.Date()
-        self.all_word[self.word_number][3]=date_now.get_date()
+        self.all_word[self.word_number][3]=MyDate.Date().get_date()
+        self.all_word[self.word_number][4]=MyCalculator.update(self.all_word[self.word_number][4],-1)
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
@@ -150,8 +152,8 @@ class MainFrame(wx.Frame):
 
     def recite_react_button_yes(self,event):
         self.all_word[self.word_number][1]+=1
-        date_now=MyDate.Date()
-        self.all_word[self.word_number][3]=date_now.get_date()
+        self.all_word[self.word_number][3]=MyDate.Date().get_date()
+        self.all_word[self.word_number][4]=MyCalculator.update(self.all_word[self.word_number][4],5)
         self.word_number+=1
         if self.word_number>=len(self.all_word):
             self.word_number=0
