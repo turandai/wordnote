@@ -1,0 +1,10 @@
+#!/bin/bash
+#This make the program can run by double-click on this exec file wherever files at.
+
+
+p=$(dirname $_)
+cd $p
+chmod 755 main.py
+chmod 755 Frame.py
+
+./main.py
