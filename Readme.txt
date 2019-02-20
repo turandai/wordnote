@@ -2,7 +2,7 @@ TO DO LIST
 
 1. main panel:
     text control to add new word;✅
-    button add to conect entered text to data.txt;✅
+    button add to connect entered text to data.txt;✅
     button recite to start to recite words;✅
     button evaluate to start a test;✅
     add heading in the upper half of main panel;✅
@@ -24,7 +24,7 @@ TO DO LIST
 6. word study control
     record 'yes' and 'no' times;✅
     record date of last time bing responded;✅
-    generate 'learning rate' rangin from 0 to 100;✅
+    generate 'learning rate' ranging from 0 to 100;✅
     
       (store 'data.txt' like this example):
       _________________________________________________
@@ -62,5 +62,3 @@ TO DO LIST
     os: Let's talk about this
 
 ...
-
-    
